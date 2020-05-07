@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stride.Core;
 using Stride.Core.Diagnostics;
 using Stride.Graphics;
@@ -693,7 +694,7 @@ namespace Stride.Games
             }
 
             RankDevices(devices);
-
+          
             if (devices.Count == 0)
             {
                 throw new InvalidOperationException("No screen modes found after ranking");

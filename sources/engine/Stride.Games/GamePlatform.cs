@@ -260,13 +260,13 @@ namespace Stride.Games
             foreach (var graphicsAdapter in GraphicsAdapterFactory.Adapters)
             {
                 if (!string.IsNullOrEmpty(preferredParameters.RequiredAdapterUid) && graphicsAdapter.AdapterUid != preferredParameters.RequiredAdapterUid) continue;
-
+                
                 // Skip adapeters that don't have graphics output 
                 // but only if no RequiredAdapterUid is provided (OculusVR at init time might be in a device with no outputs)
-                if (graphicsAdapter.Outputs.Length == 0 && string.IsNullOrEmpty(preferredParameters.RequiredAdapterUid))
-                {
-                    continue;
-                }
+                //if (graphicsAdapter.Outputs.Length == 0 && string.IsNullOrEmpty(preferredParameters.RequiredAdapterUid))
+                //{
+                //    continue;
+                //}
 
                 var preferredGraphicsProfiles = preferredParameters.PreferredGraphicsProfile;
 
