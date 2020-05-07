@@ -1,11 +1,11 @@
 // Copyright (c) Stride contributors (https://stride3d.net) and Silicon Studio Corp. (https://www.siliconstudio.co.jp)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Stride.CrashReport;
 
 namespace Stride.Editor.CrashReport
 {
@@ -13,13 +13,13 @@ namespace Stride.Editor.CrashReport
     {
         public const string PrivacyPolicyUrl = "https://stride3d.net/legal/privacy-policy";
 
-        private readonly CrashReportData currentData;
+        private readonly Dictionary<string, object> currentData;
         private int initialHeight;
         private bool expanded;
 
         private readonly ICrashEmailSetting settings;
 
-        public CrashReportForm(CrashReportData crashReport, ICrashEmailSetting storeCrashEmailSetting)
+        public CrashReportForm(Dictionary<string, object> crashReport, ICrashEmailSetting storeCrashEmailSetting)
         {
             settings = storeCrashEmailSetting;
             currentData = crashReport;
@@ -130,13 +130,14 @@ namespace Stride.Editor.CrashReport
             Clipboard.SetText(currentData.ToString());
         }
 
-        private static void MailReport(CrashReportData report)
+        private static void MailReport(Dictionary<string, object> report)
         {
             var task = Task.Run(async () =>
             {
                 try
                 {
-                    await CrashReporter.Report(report);
+                    // TODO: do something with the report
+                    //await CrashReporter.Report(report);
                     return true;
                 }
                 catch (Exception)

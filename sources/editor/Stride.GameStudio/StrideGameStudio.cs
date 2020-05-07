@@ -3,7 +3,6 @@
 #pragma warning disable 436 // The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly' (due to StrideVersion being duplicated)
 
 using Stride.Core.Annotations;
-using Stride.Metrics;
 
 namespace Stride.GameStudio
 {
@@ -38,6 +37,5 @@ namespace Stride.GameStudio
         [NotNull]
         public static string ReportIssueUrl => "https://github.com/stride3d/stride/issues/";
 
-        public static MetricsClient MetricsClient;
     }
 }

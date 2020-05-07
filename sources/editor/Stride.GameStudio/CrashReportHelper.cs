@@ -15,7 +15,6 @@ using Stride.Core.Extensions;
 using Stride.Core.Transactions;
 using Stride.Core.Windows;
 using Stride.Assets;
-using Stride.CrashReport;
 using Stride.Core.Presentation.Services;
 using Stride.Editor.CrashReport;
 using Stride.Graphics;
@@ -48,7 +47,7 @@ namespace Stride.GameStudio
 
         public static void SendReport(string exceptionMessage, int crashLocation, string[] logs, string threadName)
         {
-            var crashReport = new CrashReportData
+            var crashReport = new Dictionary<string, Object>
             {
                 ["Application"] = "GameStudio",
                 ["UserEmail"] = "",
@@ -160,7 +159,7 @@ namespace Stride.GameStudio
             var videoConfig = AppHelper.GetVideoConfig();
             foreach (var conf in videoConfig)
             {
-                crashReport.Data.Add(Tuple.Create(conf.Key, conf.Value));
+                crashReport.Add(conf.Key, conf.Value);
             }
 
             var nonFatalReport = new StringBuilder();
@@ -174,19 +173,18 @@ namespace Stride.GameStudio
 
             // Try to anonymize reports
             // It also makes it easier to copy and paste paths
-            for (var i = 0; i < crashReport.Data.Count; i++)
-            {
-                var data = crashReport.Data[i].Item2;
+            //foreach (var data in crashReport)
+            //{
+            //    var data = crashReport.Data[i].Item2;
 
-                data = Regex.Replace(data, Regex.Escape(Environment.GetEnvironmentVariable("USERPROFILE")), Regex.Escape("%USERPROFILE%"), RegexOptions.IgnoreCase);
-                data = Regex.Replace(data, $@"\b{Regex.Escape(Environment.GetEnvironmentVariable("USERNAME"))}\b", Regex.Escape("%USERNAME%"), RegexOptions.IgnoreCase);
+            //    data = Regex.Replace(data, Regex.Escape(Environment.GetEnvironmentVariable("USERPROFILE")), Regex.Escape("%USERPROFILE%"), RegexOptions.IgnoreCase);
+            //    data = Regex.Replace(data, $@"\b{Regex.Escape(Environment.GetEnvironmentVariable("USERNAME"))}\b", Regex.Escape("%USERNAME%"), RegexOptions.IgnoreCase);
 
-                crashReport.Data[i] = Tuple.Create(crashReport.Data[i].Item1, data);
-            }
+            //    crashReport.Data[i] = Tuple.Create(crashReport.Data[i].Item1, data);
+            //}
 
             var reporter = new CrashReportForm(crashReport, new ReportSettings());
             var result = reporter.ShowDialog();
-            StrideGameStudio.MetricsClient?.CrashedSession(result == DialogResult.Yes);
         }
 
         private static void ExpandAction(TransactionViewModel actionItem, StringBuilder sb, int increment)
