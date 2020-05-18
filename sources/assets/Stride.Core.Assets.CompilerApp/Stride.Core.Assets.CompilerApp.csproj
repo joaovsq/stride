@@ -23,8 +23,6 @@
   <ItemGroup>
     <PackageReference Include="EnvDTE" Version="8.0.1" Condition="$(TargetFramework.StartsWith('net4'))" />
     <PackageReference Include="Mono.Options" Version="5.3.0.1" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\shared\SharedAssemblyInfo.cs">
@@ -32,6 +30,7 @@
     </Compile>
     <None Include="build\**\*.targets" PackagePath="build\" Pack="true" />
     <None Include="build\**\*.targets" PackagePath="buildTransitive\" Pack="true" />
+    <None Include="..\..\..\deps\Stride.MSBuild.Tasks\bin\Release\**\*.*" PackagePath="tools\" Pack="true" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\engine\Stride.Assets.Models\Stride.Assets.Models.csproj" />
