@@ -92,6 +92,7 @@ namespace Stride.GameStudio
                 // Handle arguments
                 for (var i = 0; i < args.Count; i++)
                 {
+
                     if (args[i] == "/LauncherWindowHandle")
                     {
                         windowHandle = new IntPtr(long.Parse(args[++i]));
@@ -109,6 +110,7 @@ namespace Stride.GameStudio
                         // TODO: RenderDoc is not working here (when not in debug)
                         GameStudioPreviewService.DisablePreview = true;
                         renderDocManager = new RenderDocManager();
+                        renderDocManager.Initialize();
                     }
                     else if (args[i] == "/Reattach")
                     {
@@ -131,6 +133,7 @@ namespace Stride.GameStudio
                         initialSessionPath = args[i];
                     }
                 }
+
                 RuntimeHelpers.RunModuleConstructor(typeof(Asset).Module.ModuleHandle);
 
                 //listen to logger for crash report
@@ -147,13 +150,12 @@ namespace Stride.GameStudio
                     app.Run();
                 }
 
-                renderDocManager?.Shutdown();
+                renderDocManager?.RemoveHooks();
             }
             catch (Exception e)
             {
                 HandleException(e, 0);
             }
-
         }
 
         private static void GlobalLoggerOnGlobalMessageLogged(ILogMessage logMessage)

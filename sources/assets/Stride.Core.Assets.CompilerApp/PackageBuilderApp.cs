@@ -99,11 +99,6 @@ namespace Stride.Core.Assets.CompilerApp
                     options.EnableFileLogging = v != null;
                     options.CustomLogFileName = v;
                 } },
-                { "log-pipe=", "Log pipe.", v =>
-                {
-                    if (!string.IsNullOrEmpty(v))
-                        options.LogPipeNames.Add(v);
-                } },
                 { "monitor-pipe=", "Monitor pipe.", v =>
                 {
                     if (!string.IsNullOrEmpty(v))
@@ -125,7 +120,10 @@ namespace Stride.Core.Assets.CompilerApp
                             if (equalIndex == -1)
                                 throw new OptionException("Expect name1=value1;name2=value2 format.", "property");
 
-                            options.Properties.Add(nameValue.Substring(0, equalIndex), nameValue.Substring(equalIndex + 1));
+                            var name = nameValue.Substring(0, equalIndex);
+                            var value = nameValue.Substring(equalIndex + 1);
+                            if (value != string.Empty)
+                                options.Properties.Add(name, value);
                         }
                     }
                 }
@@ -170,21 +168,15 @@ namespace Stride.Core.Assets.CompilerApp
 
             BuildResultCode exitCode;
 
-            RemoteLogForwarder assetLogger = null;
-
             try
             {
                 var unexpectedArgs = p.Parse(args);
-
-                // Set remote logger
-                assetLogger = new RemoteLogForwarder(options.Logger, options.LogPipeNames);
-                GlobalLogger.GlobalMessageLogged += assetLogger;
 
                 // Activate proper log level
                 buildEngineLogger.ActivateLog(options.LoggerType);
 
                 // Output logs to the console with colored messages
-                if (options.SlavePipe == null && !options.LogPipeNames.Any())
+                if (options.SlavePipe == null)
                 {
                     globalLoggerOnGlobalMessageLogged = new ConsoleLogListener { LogMode = ConsoleLogMode.Always };
                     globalLoggerOnGlobalMessageLogged.TextFormatter = FormatLog;
@@ -324,13 +316,6 @@ namespace Stride.Core.Assets.CompilerApp
             }
             finally
             {
-                // Flush and close remote logger
-                if (assetLogger != null)
-                {
-                    GlobalLogger.GlobalMessageLogged -= assetLogger;
-                    assetLogger.Dispose();
-                }
-
                 if (fileLogListener != null)
                 {
                     GlobalLogger.GlobalMessageLogged -= fileLogListener;

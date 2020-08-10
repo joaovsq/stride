@@ -3,7 +3,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sd="http://schemas.stride3d.net/xaml/presentation"
-        xmlns:crashReport="clr-namespace:Stride.Editor.CrashReport"
         WindowStartupLocation="CenterScreen" Style="{DynamicResource WindowChromeStyle}"
         Title="Privacy Policy" Icon="{DynamicResource LauncherIcon}" SizeToContent="WidthAndHeight"
         ResizeMode="NoResize">
@@ -17,10 +16,11 @@
   <StackPanel>
     <TextBlock Text="You must agree to the privacy policy to use Stride." Margin="20,20,20,0" />
     <TextBlock Margin="20,10">
-      <Hyperlink TextDecorations="Underline" CommandParameter="{x:Static crashReport:CrashReportForm.PrivacyPolicyUrl}"
+      <!--<Hyperlink TextDecorations="Underline" CommandParameter="{x:Static crashReport:CrashReportForm.PrivacyPolicyUrl}"
                  Command="{x:Static sd:UtilityCommands.OpenHyperlinkCommand}">
         <Run Text="{x:Static crashReport:CrashReportForm.PrivacyPolicyUrl}" />
-      </Hyperlink>
+      </Hyperlink>-->
+      Do whatever you want, just don't sue me! Rock n' Roll !
     </TextBlock>
     <CheckBox IsChecked="{Binding PrivacyPolicyAccepted, RelativeSource={RelativeSource AncestorType=Window}}"
               IsEnabled="{Binding CanAccept, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}"

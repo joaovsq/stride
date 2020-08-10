@@ -16,7 +16,6 @@ using Stride.Core.Transactions;
 using Stride.Core.Windows;
 using Stride.Assets;
 using Stride.Core.Presentation.Services;
-using Stride.Editor.CrashReport;
 using Stride.Graphics;
 using DialogResult = System.Windows.Forms.DialogResult;
 
@@ -24,7 +23,7 @@ namespace Stride.GameStudio
 {
     public static class CrashReportHelper
     {
-        public class ReportSettings : ICrashEmailSetting
+        public class ReportSettings 
         {
             public ReportSettings()
             {
@@ -150,10 +149,10 @@ namespace Stride.GameStudio
                 e.Ignore();
             }
 
+            OperatingSystem osVersion = Environment.OSVersion;
+            crashReport["OsVersion"] = $"{osVersion.Platform} {osVersion.VersionString} {(Environment.Is64BitOperatingSystem ? "x64" : "x86")}";
             crashReport["CurrentDirectory"] = Environment.CurrentDirectory;
             crashReport["CommandArgs"] = string.Join(" ", AppHelper.GetCommandLineArgs());
-            var osVersion = CrashReportUtils.GetOsVersionAndCaption();
-            crashReport["OsVersion"] = $"{osVersion.Key} {osVersion.Value} {(Environment.Is64BitOperatingSystem ? "x64" : "x86")}";
             crashReport["ProcessorCount"] = Environment.ProcessorCount.ToString();
             crashReport["Exception"] = exceptionMessage;
             var videoConfig = AppHelper.GetVideoConfig();
@@ -183,8 +182,8 @@ namespace Stride.GameStudio
             //    crashReport.Data[i] = Tuple.Create(crashReport.Data[i].Item1, data);
             //}
 
-            var reporter = new CrashReportForm(crashReport, new ReportSettings());
-            var result = reporter.ShowDialog();
+            //var reporter = new CrashReportForm(crashReport, new ReportSettings());
+            //var result = reporter.ShowDialog();
         }
 
         private static void ExpandAction(TransactionViewModel actionItem, StringBuilder sb, int increment)

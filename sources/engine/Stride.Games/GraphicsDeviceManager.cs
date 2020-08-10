@@ -143,7 +143,7 @@ namespace Stride.Games
         {
             game.Window.ClientSizeChanged += Window_ClientSizeChanged;
             game.Window.OrientationChanged += Window_OrientationChanged;
-            game.Window.FullscreenToggle += WindowOnFullscreenToggle;
+            game.Window.FullscreenChanged += Window_FullscreenChanged;
         }
 
         #endregion
@@ -928,10 +928,24 @@ namespace Stride.Games
             }
         }
 
-        private void WindowOnFullscreenToggle(object sender, EventArgs eventArgs)
+        private void Window_FullscreenChanged(object sender, EventArgs eventArgs)
         {
-            IsFullScreen = !IsFullScreen;
-            ApplyChanges();
+            if (sender is GameWindow window)
+            {
+                IsFullScreen = window.IsFullscreen;
+                if (IsFullScreen)
+                {
+                    PreferredBackBufferWidth = window.PreferredFullscreenSize.X;
+                    PreferredBackBufferHeight = window.PreferredFullscreenSize.Y;
+                }
+                else
+                {
+                    PreferredBackBufferWidth = window.PreferredWindowedSize.X;
+                    PreferredBackBufferHeight = window.PreferredWindowedSize.Y;
+                }
+
+                ApplyChanges();
+            }
         }
 
         private void CreateDevice(GraphicsDeviceInformation newInfo)
@@ -1093,6 +1107,7 @@ namespace Stride.Games
                         if (isBeginScreenDeviceChange)
                         {
                             game.Window.EndScreenDeviceChange(width, height);
+                            game.Window.SetIsReallyFullscreen(isReallyFullScreen);
                         }
 
                         currentWindowOrientation = game.Window.CurrentOrientation;
